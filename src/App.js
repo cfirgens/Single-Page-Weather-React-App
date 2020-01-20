@@ -6,12 +6,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'weather-icons/css/weather-icons.css';
 
 
-const API_key = process.env.Weather_API_Key;
+const API_key = "ca76c48131e90a9e8c4a1124919229bc"
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      city: undefined,
+      country: undefined
+    }
     this.getWeather();
   }
 
@@ -21,6 +24,10 @@ class App extends React.Component {
     const response = await api_call.json();
 
     console.log(response);
+    this.setState({
+      city: response.name,
+      country: response.sys.country
+    });
     
 }
 
@@ -28,7 +35,7 @@ class App extends React.Component {
   render() { 
     return ( 
       <div className="App">
-      <Weather />
+        <Weather city={this.state.city} country={this.state.country} />
       </div>
       
      );
