@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 const Weather = () => {
     return (
         <div className="container">
-            <h1>Weather App</h1>
+            <div className="cards">
+                <h1>London</h1>
+                <h5 className="py-4">
+                    <i className="wi wi-day-sunny display-1"></i>
+                </h5>
+            </div>
         </div>
     );
 }
