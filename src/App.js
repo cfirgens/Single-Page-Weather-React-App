@@ -4,6 +4,7 @@ import './App.css';
 import Weather from './components/weather.component';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'weather-icons/css/weather-icons.css';
+import Form from './components/form.component';
 
 
 const API_key = "ca76c48131e90a9e8c4a1124919229bc"
@@ -22,7 +23,6 @@ class App extends React.Component {
       description: "",
       error:false
     }
-    this.getWeather();
 
     this.weatherIcon = {
       Thunderstorm: "wi-thunderstorm",
@@ -65,22 +65,30 @@ class App extends React.Component {
     }
   }
 
-  getWeather = async () => {
-    const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${API_key}`);
+  getWeather = async (e) => {
+    e.preventDefault();
+
+    const city = e.target.elements.city.value;
+    const country = e.target.elements.country.value;
+    if (city && country) {
+      const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_key}`);
     
     const response = await api_call.json();
 
-    console.log(response);
-
     this.setState({
-      city: response.name,
-      country: response.sys.country,
+      city: `${response.name}, ${response.sys.country}`,
       fahrenheit: this.calFahrenheit(response.main.temp),
       temp_max: this.calFahrenheit(response.main.temp_max),
       temp_min: this.calFahrenheit(response.main.temp_min),
       description: response.weather[0].description,
+      error: false
     });
     this.getWeatherIcon(this.weatherIcon, response.weather[0].id);
+    } else {
+      this.setState({ error: true });
+    }
+
+    
   };
 calFahrenheit(temp){
   let fahrenheit = Math.floor((temp - 273.15)*(9/5)+32);
@@ -90,6 +98,7 @@ calFahrenheit(temp){
   render() { 
     return ( 
       <div className="App">
+        <Form loadweather={this.getWeather} error={this.state.error} />
         <Weather city={this.state.city} country={this.state.country} temp_fahrenheit={this.state.fahrenheit} temp_max={this.state.temp_max} temp_min={this.state.temp_min} description={this.state.description}
           weatherIcon={this.state.icon}/>
       </div>
