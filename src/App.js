@@ -35,6 +35,36 @@ class App extends React.Component {
     }
   }
 
+  getWeatherIcon(icons, rangeId) {
+    switch (true) {
+      case rangeId >= 200 && rangeId <= 232:
+        this.setState({ icon: this.weatherIcon.Thunderstorm });
+        break;
+      case rangeId >= 300 && rangeId <= 321:
+        this.setState({ icon: this.weatherIcon.Drizzle });
+        break;
+        case rangeId >= 500 && rangeId <= 531:
+          this.setState({ icon: this.weatherIcon.Rain });
+        break;
+        case rangeId >= 600 && rangeId <= 622:
+          this.setState({ icon: this.weatherIcon.Snow });
+        break;
+        case rangeId >= 701 && rangeId <= 781:
+          this.setState({ icon: this.weatherIcon.Atmosphere });
+        break;
+        case rangeId === 800:
+          this.setState({ icon: this.weatherIcon.Clear });
+        break;
+        case rangeId >= 801 && rangeId <= 804:
+          this.setState({ icon: this.weatherIcon.Clouds });
+        break;
+      default:
+        this.setState({ icon: this.weatherIcon.Clear });
+
+      
+    }
+  }
+
   getWeather = async () => {
     const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${API_key}`);
     
@@ -49,10 +79,9 @@ class App extends React.Component {
       temp_max: this.calFahrenheit(response.main.temp_max),
       temp_min: this.calFahrenheit(response.main.temp_min),
       description: response.weather[0].description,
-      icon:this.weatherIcon.Thunderstorm,
     });
-    
-}
+    this.getWeatherIcon(this.weatherIcon, response.weather[0].id);
+  };
 calFahrenheit(temp){
   let fahrenheit = Math.floor((temp - 273.15)*(9/5)+32);
   return fahrenheit;
