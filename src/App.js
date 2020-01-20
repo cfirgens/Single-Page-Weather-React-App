@@ -13,7 +13,14 @@ class App extends React.Component {
     super(props);
     this.state = {
       city: undefined,
-      country: undefined
+      country: undefined,
+      icon: undefined,
+      main: undefined,
+      temp_max: undefined,
+      temp_min: undefined,
+      fahrenheit: undefined,
+      description: "",
+      error:false
     }
     this.getWeather();
   }
